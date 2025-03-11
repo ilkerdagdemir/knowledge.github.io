@@ -5,19 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Space Shooter Game</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: black; text-align: center; }
+        body { margin: 0; overflow: hidden; background-color: black; }
         canvas { display: block; }
-        .controls { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; }
-        button { font-size: 20px; padding: 15px; background: white; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas"></canvas>
-    <div class="controls">
-        <button id="leftBtn">⬅ Left</button>
-        <button id="fireBtn">🔥 Fire</button>
-        <button id="rightBtn">➡ Right</button>
-    </div>
 
     <script>
         const canvas = document.getElementById("gameCanvas");
@@ -25,8 +18,8 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let spaceship = { x: canvas.width / 2 - 25, y: canvas.height - 80, width: 50, height: 60, speed: 8, dx: 0 };
-        let bullets = [], asteroids = [], score = 0, gameRunning = true;
+        let spaceship = { x: canvas.width / 2 - 25, y: canvas.height - 80, width: 50, height: 60, dx: 0 };
+        let bullets = [], asteroids = [], score = 0, gameRunning = true, touchX = null;
 
         function drawSpaceship() {
             ctx.fillStyle = "white";
@@ -85,8 +78,8 @@
         }
 
         function keyDown(event) {
-            if (event.key === "ArrowLeft") spaceship.dx = -spaceship.speed;
-            if (event.key === "ArrowRight") spaceship.dx = spaceship.speed;
+            if (event.key === "ArrowLeft") spaceship.dx = -8;
+            if (event.key === "ArrowRight") spaceship.dx = 8;
             if (event.key === " ") shootBullet();
         }
 
@@ -97,14 +90,27 @@
         document.addEventListener("keydown", keyDown);
         document.addEventListener("keyup", keyUp);
 
-        // 🚀 Touch Controls for Mobile:
-        document.getElementById("leftBtn").addEventListener("touchstart", () => spaceship.dx = -spaceship.speed);
-        document.getElementById("leftBtn").addEventListener("touchend", () => spaceship.dx = 0);
+        // 🚀 **Touch Controls for Mobile:**
+        document.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 1) {
+                let touch = e.touches[0];
+                touchX = touch.clientX;
+                shootBullet(); // Fire when tapping
+            }
+        });
 
-        document.getElementById("rightBtn").addEventListener("touchstart", () => spaceship.dx = spaceship.speed);
-        document.getElementById("rightBtn").addEventListener("touchend", () => spaceship.dx = 0);
+        document.addEventListener("touchmove", (e) => {
+            if (e.touches.length === 1) {
+                let touch = e.touches[0];
+                let deltaX = touch.clientX - touchX;
+                spaceship.dx = deltaX * 0.1; // Adjust speed based on swipe distance
+                touchX = touch.clientX;
+            }
+        });
 
-        document.getElementById("fireBtn").addEventListener("touchstart", shootBullet);
+        document.addEventListener("touchend", () => {
+            spaceship.dx = 0;
+        });
 
         setInterval(generateAsteroid, 1000);
 
