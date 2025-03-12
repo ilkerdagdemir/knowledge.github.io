@@ -20,6 +20,7 @@
 
         let spaceship = { x: canvas.width / 2 - 25, y: canvas.height - 80, width: 50, height: 60, dx: 0 };
         let bullets = [], asteroids = [], score = 0, gameRunning = true, touchX = null;
+        const spaceshipSpeed = 12; // 🚀 Increased speed for better control
 
         function drawSpaceship() {
             ctx.fillStyle = "white";
@@ -35,7 +36,7 @@
         function drawBullets() {
             ctx.fillStyle = "red";
             bullets.forEach((bullet, index) => {
-                bullet.y -= 6;
+                bullet.y -= 10; // 🔥 Faster bullets
                 ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
                 if (bullet.y < 0) bullets.splice(index, 1);
             });
@@ -61,7 +62,7 @@
         }
 
         function generateAsteroid() {
-            asteroids.push({ x: Math.random() * (canvas.width - 30), y: 0, size: 30 + Math.random() * 20, speed: 2 + Math.random() * 3 });
+            asteroids.push({ x: Math.random() * (canvas.width - 30), y: 0, size: 30 + Math.random() * 20, speed: 3 + Math.random() * 3 });
         }
 
         function checkBulletCollision() {
@@ -78,8 +79,8 @@
         }
 
         function keyDown(event) {
-            if (event.key === "ArrowLeft") spaceship.dx = -8;
-            if (event.key === "ArrowRight") spaceship.dx = 8;
+            if (event.key === "ArrowLeft") spaceship.dx = -spaceshipSpeed;
+            if (event.key === "ArrowRight") spaceship.dx = spaceshipSpeed;
             if (event.key === " ") shootBullet();
         }
 
@@ -103,7 +104,7 @@
             if (e.touches.length === 1) {
                 let touch = e.touches[0];
                 let deltaX = touch.clientX - touchX;
-                spaceship.dx = deltaX * 0.1; // Adjust speed based on swipe distance
+                spaceship.dx = deltaX * 0.3; // 🔥 Faster response (was 0.1 before)
                 touchX = touch.clientX;
             }
         });
@@ -112,7 +113,7 @@
             spaceship.dx = 0;
         });
 
-        setInterval(generateAsteroid, 1000);
+        setInterval(generateAsteroid, 800); // 🔥 Faster spawning for more challenge!
 
         function gameLoop() {
             if (!gameRunning) return;
