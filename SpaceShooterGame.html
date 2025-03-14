@@ -19,7 +19,6 @@
         .joystick {
             position: absolute;
             bottom: 20px;
-            left: 20px;
             width: 80px;
             height: 80px;
             background: rgba(255, 255, 255, 0.3);
@@ -41,7 +40,7 @@
         let spaceship = { x: canvas.width / 2 - 25, y: canvas.height - 80, width: 50, height: 60, dx: 0 };
         let bullets = [], asteroids = [], score = 0, gameRunning = true;
         const spaceshipSpeed = 10;
-        let joystickActive = false, joystickStartX = 0;
+        let joystickActive = false, joystickStartX = 0, joystickCurrentX = 0;
 
         function drawSpaceship() {
             ctx.fillStyle = "white";
@@ -67,20 +66,37 @@
             bullets.push({ x: spaceship.x + spaceship.width / 2 - 5, y: spaceship.y, width: 10, height: 20 });
         }
 
+        function generateAsteroid() {
+            let size = Math.random() * 40 + 10;
+            let speed = Math.random() * 4 + 2;
+            asteroids.push({ x: Math.random() * (canvas.width - size), y: 0, size, speed });
+        }
+
+        function drawAsteroids() {
+            ctx.fillStyle = "gray";
+            asteroids.forEach((asteroid, index) => {
+                ctx.fillRect(asteroid.x, asteroid.y, asteroid.size, asteroid.size);
+                asteroid.y += asteroid.speed;
+                if (asteroid.y > canvas.height) asteroids.splice(index, 1);
+            });
+        }
+
         document.addEventListener("touchstart", (e) => {
             if (e.target.id !== "joystick") {
                 shootBullet();
             } else {
                 joystickActive = true;
                 joystickStartX = e.touches[0].clientX;
+                joystickCurrentX = joystickStartX;
+                document.getElementById("joystick").style.left = joystickStartX - 40 + "px";
             }
         });
 
         document.addEventListener("touchmove", (e) => {
             if (joystickActive) {
-                let deltaX = e.touches[0].clientX - joystickStartX;
-                spaceship.dx = deltaX * 0.2;
-                joystickStartX = e.touches[0].clientX;
+                joystickCurrentX = e.touches[0].clientX;
+                spaceship.dx = (joystickCurrentX - joystickStartX) * 0.2;
+                joystickStartX = joystickCurrentX;
             }
         });
 
@@ -89,12 +105,15 @@
             joystickActive = false;
         });
 
+        setInterval(generateAsteroid, 1000);
+
         function gameLoop() {
             if (!gameRunning) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             moveSpaceship();
             drawSpaceship();
             drawBullets();
+            drawAsteroids();
             requestAnimationFrame(gameLoop);
         }
 
