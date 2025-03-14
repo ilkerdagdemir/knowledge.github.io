@@ -79,10 +79,11 @@
         }
 
         function generateAsteroid() {
-            let size = Math.random() * 40 + 10;
-            let speed = enemyBaseSpeed + Math.random() * 2;
+            let size = Math.random() * 40 + 10; // Bigger enemies have less life
+            let life = Math.floor((50 - size) / 10) + 1; // Scale life from 1 to 5
+            let speed = enemyBaseSpeed + Math.random() * 2; // Start slow, increase over time
 
-            asteroids.push({ x: Math.random() * (canvas.width - size), y: 0, size, speed });
+            asteroids.push({ x: Math.random() * (canvas.width - size), y: 0, size, speed, life });
         }
 
         function checkBulletCollision() {
@@ -108,7 +109,7 @@
 
         function increaseEnemySpeed() {
             if (enemyBaseSpeed < maxEnemySpeed) {
-                enemyBaseSpeed += 0.1;
+                enemyBaseSpeed += 0.1; // Gradually increase enemy speed
             }
         }
 
@@ -147,7 +148,7 @@
         });
 
         setInterval(generateAsteroid, 600);
-        setInterval(increaseEnemySpeed, 5000);
+        setInterval(increaseEnemySpeed, 5000); // Enemies get faster every 5 seconds
 
         function gameLoop() {
             if (!gameRunning) return;
