@@ -1,19 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rotherham Location Exam</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 10px; max-width: 600px; margin: auto; }
-        .question { margin-bottom: 15px; padding: 10px; border-radius: 5px; }
-        .options label { display: block; }
-        #submit, #restart { margin-top: 20px; display: block; width: 100%; padding: 15px; font-size: 16px; }
-        .correct { background-color: lightgreen; }
-        .incorrect { background-color: lightcoral; }
-        .unanswered { background-color: lightblue; }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .options label {
+            display: block;
+        }
+
+        #submit,
+        #restart {
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        .correct {
+            background-color: lightgreen;
+        }
+
+        .incorrect {
+            background-color: lightcoral;
+        }
+
+        .unanswered {
+            background-color: lightblue;
+        }
     </style>
 </head>
+
 <body>
     <h2>Rotherham Location Exam</h2>
     <form id="examForm">
@@ -22,71 +54,71 @@
         <button type="button" id="restart" onclick="generateExam()" style="display:none;">Restart</button>
     </form>
     <h3 id="result"></h3>
-    
+
     <script>
         const questions = [
-{ question: "Corporation Street, Rotherham to Laughton", answer: "Thurcroft" },
-{ question: "Ship Hill Taxi Rank to Thrybergh", answer: "Dalton" },
-{ question: "Hooton Roberts to Three Horseshoes, Wickersley", answer: "Ravenfield" },
-{ question: "Wath upon Dearne to Golden Ball, Whiston", answer: "Rotherham" },
-{ question: "Thurcroft to Café Sport Bar, Swinton", answer: "Wickersley" },
-{ question: "Bramley to Todwick", answer: "Thurcroft" },
-{ question: "Swallownest to Woodsetts", answer: "North Anston" },
-{ question: "Treeton to The Sportsman, Thorpe Hesley", answer: "Brinsworth" },
-{ question: "Dinnington to Swallownest", answer: "Aston" },
-{ question: "Corporation Street Taxi Rank to Thorpe Hesley", answer: "Kimberworth" },
-{ question: "Dinnington to Clifton Lane Rugby Ground", answer: "Laughton Common" },
-{ question: "Dalton to Aston Hall Hotel", answer: "Aughton" },
-{ question: "Wath upon Dearne to Rotherham Town Hall", answer: "Rawmarsh" },
-{ question: "Brampton Bierlow to New York Stadium", answer: "Greasbrough" },
-{ question: "Kimberworth Park to Rother Valley College, Dinnington", answer: "Laughton Common" },
-{ question: "King Henry, Bramley to Rotherham Town Centre", answer: "Wickersley" },
-{ question: "Swinton to Tesco Superstore, Rotherham", answer: "Rawmarsh" },
-{ question: "Woodsetts to Black Lion, Firbeck", answer: "Letwell" },
-{ question: "Kiveton Park to Woodsetts", answer: "South Anston" },
-{ question: "Todwick to Harthill", answer: "Kiveton Park" },
-{ question: "Ulley to Doncaster Gate Hospital", answer: "Whiston" },
-{ question: "Brinsworth to Hellaby Industrial Estate", answer: "Bramley" },
-{ question: "Todwick to Yate’s Wine Lodge, Rotherham", answer: "Whiston" },
-{ question: "Thorpe Hesley to Rotherham District General Hospital", answer: "Kimberworth" },
-{ question: "Wales to Treeton", answer: "Aughton" },
-{ question: "Swinton to Riverside House, Rotherham", answer: "Rawmarsh" },
-{ question: "Bramley to Kiveton Park", answer: "Todwick" },
-{ question: "Hooton Roberts to Dinnington", answer: "Laughton Common" },
-{ question: "The Hind, Whiston to Horse and Jockey, Rawmarsh", answer: "Parkgate" },
-{ question: "Market Street to Rockingham Arms Hotel, Wentworth", answer: "Greasbrough" },
-{ question: "Swallownest to Queens Hotel, Maltby", answer: "Thurcroft" },
-{ question: "Bramley to Mexborough", answer: "Hooton Roberts" },
-{ question: "Rotherham Train Station Taxi Rank to Hellaby Hall Hotel", answer: "Wickersley" },
-{ question: "Masons, Wickersley to Brampton-en-le-Morthen", answer: "Thurcroft" },
-{ question: "Firbeck to North Anston", answer: "Dinnington" },
-{ question: "Whiston to Station Hotel, Swinton", answer: "Kilnhurst" },
-{ question: "Wath upon Dearne to Brentwood Hotel, Moorgate", answer: "Rawmarsh" },
-{ question: "Greasbrough to Consort Hotel, Thurcroft", answer: "Wickersley" },
-{ question: "Market Street Taxi Rank to Meadowbank", answer: "Ferham" },
-{ question: "Bramley to Meadowhall Shopping Centre", answer: "Wickersley" },
-{ question: "Brampton-en-le-Morthen to Horse and Jockey, Rawmarsh", answer: "Wickersley" },
-{ question: "Rotherham Train Station Taxi Rank to Ibis Hotel, Bramley", answer: "Wickersley" },
-{ question: "Frederick Street Taxi Rank to Broom", answer: "Clifton" },
-{ question: "Brinsworth to Beighton", answer: "Swallownest" },
-{ question: "South Anston to Gildingwells", answer: "Dinnington" },
-{ question: "Hooton Roberts to Treeton", answer: "Dalton" },
-{ question: "Wath-Upon-Dearne to Holiday Inn Hotel, Canklow", answer: "Rawmarsh" },
-{ question: "Kiveton Park to Old Ravenfield", answer: "Todwick" },
-{ question: "Kiveton Park to Laughton", answer: "Todwick" },
-{ question: "Laughton Common to Catcliffe Primary School", answer: "Whiston" },
-{ question: "Todwick to Ibis Hotel, Bramley", answer: "Thurcroft" },
-{ question: "Rotherham Bus Station to Safeway Superstore, Dinnington", answer: "Laughton Common" },
-{ question: "Mexborough to Scholes", answer: "Swinton" },
-{ question: "New York Stadium to Sunnyside", answer: "Dalton" },
-{ question: "Orgreave to Rotherham Museum, Clifton Park", answer: "Brinsworth" },
-{ question: "Frederick Street Taxi Rank to Asda Superstore, Dalton", answer: "Eastwood" },
-{ question: "Sunnyside to Kiveton Park", answer: "Todwick" },
-{ question: "Riverside House to Maltby", answer: "Hellaby" },
-{ question: "Greasbrough to Wombwell", answer: "Brampton Bierlow" },
-{ question: "Oldcotes to Rotherham Train Station", answer: "Maltby" }
-];
-const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinsworth", "Clifton", "Dalton", "Dinnington", "Eastwood", "Ferham", "Greasbrough", "Hellaby", "Hooton Roberts", "Kilnhurst", "Kimberworth", "Kiveton Park", "Laughton Common", "Letwell", "Maltby", "North Anston", "Parkgate", "Ravenfield", "Rawmarsh", "Rotherham", "South Anston", "Swallownest", "Swinton", "Thurcroft", "Todwick", "Whiston", "Wickersley"];
+            { question: "Corporation Street, Rotherham to Laughton", answer: "Thurcroft" },
+            { question: "Ship Hill Taxi Rank to Thrybergh", answer: "Dalton" },
+            { question: "Hooton Roberts to Three Horseshoes, Wickersley", answer: "Ravenfield" },
+            { question: "Wath upon Dearne to Golden Ball, Whiston", answer: "Rotherham" },
+            { question: "Thurcroft to Café Sport Bar, Swinton", answer: "Wickersley" },
+            { question: "Bramley to Todwick", answer: "Thurcroft" },
+            { question: "Swallownest to Woodsetts", answer: "North Anston" },
+            { question: "Treeton to The Sportsman, Thorpe Hesley", answer: "Brinsworth" },
+            { question: "Dinnington to Swallownest", answer: "Aston" },
+            { question: "Corporation Street Taxi Rank to Thorpe Hesley", answer: "Kimberworth" },
+            { question: "Dinnington to Clifton Lane Rugby Ground", answer: "Laughton Common" },
+            { question: "Dalton to Aston Hall Hotel", answer: "Aughton" },
+            { question: "Wath upon Dearne to Rotherham Town Hall", answer: "Rawmarsh" },
+            { question: "Brampton Bierlow to New York Stadium", answer: "Greasbrough" },
+            { question: "Kimberworth Park to Rother Valley College, Dinnington", answer: "Laughton Common" },
+            { question: "King Henry, Bramley to Rotherham Town Centre", answer: "Wickersley" },
+            { question: "Swinton to Tesco Superstore, Rotherham", answer: "Rawmarsh" },
+            { question: "Woodsetts to Black Lion, Firbeck", answer: "Letwell" },
+            { question: "Kiveton Park to Woodsetts", answer: "South Anston" },
+            { question: "Todwick to Harthill", answer: "Kiveton Park" },
+            { question: "Ulley to Doncaster Gate Hospital", answer: "Whiston" },
+            { question: "Brinsworth to Hellaby Industrial Estate", answer: "Bramley" },
+            { question: "Todwick to Yate’s Wine Lodge, Rotherham", answer: "Whiston" },
+            { question: "Thorpe Hesley to Rotherham District General Hospital", answer: "Kimberworth" },
+            { question: "Wales to Treeton", answer: "Aughton" },
+            { question: "Swinton to Riverside House, Rotherham", answer: "Rawmarsh" },
+            { question: "Bramley to Kiveton Park", answer: "Todwick" },
+            { question: "Hooton Roberts to Dinnington", answer: "Laughton Common" },
+            { question: "The Hind, Whiston to Horse and Jockey, Rawmarsh", answer: "Parkgate" },
+            { question: "Market Street to Rockingham Arms Hotel, Wentworth", answer: "Greasbrough" },
+            { question: "Swallownest to Queens Hotel, Maltby", answer: "Thurcroft" },
+            { question: "Bramley to Mexborough", answer: "Hooton Roberts" },
+            { question: "Rotherham Train Station Taxi Rank to Hellaby Hall Hotel", answer: "Wickersley" },
+            { question: "Masons, Wickersley to Brampton-en-le-Morthen", answer: "Thurcroft" },
+            { question: "Firbeck to North Anston", answer: "Dinnington" },
+            { question: "Whiston to Station Hotel, Swinton", answer: "Kilnhurst" },
+            { question: "Wath upon Dearne to Brentwood Hotel, Moorgate", answer: "Rawmarsh" },
+            { question: "Greasbrough to Consort Hotel, Thurcroft", answer: "Wickersley" },
+            { question: "Market Street Taxi Rank to Meadowbank", answer: "Ferham" },
+            { question: "Bramley to Meadowhall Shopping Centre", answer: "Wickersley" },
+            { question: "Brampton-en-le-Morthen to Horse and Jockey, Rawmarsh", answer: "Wickersley" },
+            { question: "Rotherham Train Station Taxi Rank to Ibis Hotel, Bramley", answer: "Wickersley" },
+            { question: "Frederick Street Taxi Rank to Broom", answer: "Clifton" },
+            { question: "Brinsworth to Beighton", answer: "Swallownest" },
+            { question: "South Anston to Gildingwells", answer: "Dinnington" },
+            { question: "Hooton Roberts to Treeton", answer: "Dalton" },
+            { question: "Wath-Upon-Dearne to Holiday Inn Hotel, Canklow", answer: "Rawmarsh" },
+            { question: "Kiveton Park to Old Ravenfield", answer: "Todwick" },
+            { question: "Kiveton Park to Laughton", answer: "Todwick" },
+            { question: "Laughton Common to Catcliffe Primary School", answer: "Whiston" },
+            { question: "Todwick to Ibis Hotel, Bramley", answer: "Thurcroft" },
+            { question: "Rotherham Bus Station to Safeway Superstore, Dinnington", answer: "Laughton Common" },
+            { question: "Mexborough to Scholes", answer: "Swinton" },
+            { question: "New York Stadium to Sunnyside", answer: "Dalton" },
+            { question: "Orgreave to Rotherham Museum, Clifton Park", answer: "Brinsworth" },
+            { question: "Frederick Street Taxi Rank to Asda Superstore, Dalton", answer: "Eastwood" },
+            { question: "Sunnyside to Kiveton Park", answer: "Todwick" },
+            { question: "Riverside House to Maltby", answer: "Hellaby" },
+            { question: "Greasbrough to Wombwell", answer: "Brampton Bierlow" },
+            { question: "Oldcotes to Rotherham Train Station", answer: "Maltby" }
+        ];
+        const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinsworth", "Clifton", "Dalton", "Dinnington", "Eastwood", "Ferham", "Greasbrough", "Hellaby", "Hooton Roberts", "Kilnhurst", "Kimberworth", "Kiveton Park", "Laughton Common", "Letwell", "Maltby", "North Anston", "Parkgate", "Ravenfield", "Rawmarsh", "Rotherham", "South Anston", "Swallownest", "Swinton", "Thurcroft", "Todwick", "Whiston", "Wickersley"];
 
         function shuffle(array) {
             return array.sort(() => Math.random() - 0.5);
@@ -97,22 +129,22 @@ const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinswor
             document.getElementById("result").innerText = "";
             document.getElementById("submit").style.display = "block";
             document.getElementById("restart").style.display = "none";
-            
+
             let selectedQuestions = shuffle([...questions]).slice(0, 20);
             selectedQuestions.forEach((q, index) => {
                 const div = document.createElement("div");
                 div.classList.add("question");
                 div.innerHTML = `<p><strong>${index + 1}. ${q.question}</strong></p>`;
-                
+
                 let incorrectAnswers = shuffle(locations.filter(l => l !== q.answer)).slice(0, 3);
                 let options = shuffle([q.answer, ...incorrectAnswers]);
-                
+
                 options.forEach(option => {
                     div.innerHTML += `<div class="options">
                         <label><input type="radio" name="q${index}" value="${option}" data-correct="${q.answer}"> ${option}</label>
                     </div>`;
                 });
-                
+
                 document.getElementById("questionsContainer").appendChild(div);
             });
         }
@@ -120,11 +152,11 @@ const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinswor
         function gradeExam() {
             let score = 0;
             const questionsDivs = document.querySelectorAll(".question");
-            
+
             questionsDivs.forEach((div, index) => {
                 const selected = div.querySelector("input[name='q" + index + "']:checked");
                 const correctAnswer = div.querySelector("input[name='q" + index + "']").getAttribute("data-correct");
-                
+
                 if (selected) {
                     if (selected.value === correctAnswer) {
                         score++;
@@ -148,4 +180,5 @@ const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinswor
         generateExam();
     </script>
 </body>
+
 </html>
