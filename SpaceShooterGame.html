@@ -96,7 +96,7 @@
                         bullet.y + bullet.height > asteroid.y
                     ) {
                         bullets.splice(bulletIndex, 1);
-                        asteroid.life -= 1;
+                        asteroid.life -= 1; // Reduce asteroid life
 
                         if (asteroid.life <= 0) {
                             asteroids.splice(asteroidIndex, 1);
