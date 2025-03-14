@@ -15,12 +15,23 @@
         canvas {
             display: block;
         }
+
+        .joystick {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            touch-action: none;
+        }
     </style>
 </head>
 
 <body>
     <canvas id="gameCanvas"></canvas>
-
+    <div class="joystick" id="joystick"></div>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
@@ -28,10 +39,9 @@
         canvas.height = window.innerHeight;
 
         let spaceship = { x: canvas.width / 2 - 25, y: canvas.height - 80, width: 50, height: 60, dx: 0 };
-        let bullets = [], asteroids = [], score = 0, gameRunning = true, touchX = null;
-        const spaceshipSpeed = 80;
-        let enemyBaseSpeed = 2; // Enemies start slow
-        const maxEnemySpeed = 6; // Max speed after time
+        let bullets = [], asteroids = [], score = 0, gameRunning = true;
+        const spaceshipSpeed = 10;
+        let joystickActive = false, joystickStartX = 0;
 
         function drawSpaceship() {
             ctx.fillStyle = "white";
@@ -53,102 +63,31 @@
             });
         }
 
-        function drawAsteroids() {
-            asteroids.forEach((asteroid, index) => {
-                ctx.fillStyle = "gray";
-                ctx.fillRect(asteroid.x, asteroid.y, asteroid.size, asteroid.size);
-                asteroid.y += asteroid.speed;
-
-                if (asteroid.y > canvas.height) asteroids.splice(index, 1);
-
-                if (
-                    asteroid.x < spaceship.x + spaceship.width &&
-                    asteroid.x + asteroid.size > spaceship.x &&
-                    asteroid.y < spaceship.y + spaceship.height &&
-                    asteroid.y + asteroid.size > spaceship.y
-                ) {
-                    gameRunning = false;
-                    alert("Game Over! Your Score: " + score);
-                    location.reload();
-                }
-            });
-        }
-
         function shootBullet() {
             bullets.push({ x: spaceship.x + spaceship.width / 2 - 5, y: spaceship.y, width: 10, height: 20 });
         }
 
-        function generateAsteroid() {
-            let size = Math.random() * 40 + 10; // Bigger enemies have less life
-            let life = Math.floor((50 - size) / 10) + 1; // Scale life from 1 to 5
-            let speed = enemyBaseSpeed + Math.random() * 2; // Start slow, increase over time
-
-            asteroids.push({ x: Math.random() * (canvas.width - size), y: 0, size, speed, life });
-        }
-
-        function checkBulletCollision() {
-            bullets.forEach((bullet, bulletIndex) => {
-                asteroids.forEach((asteroid, asteroidIndex) => {
-                    if (
-                        bullet.x < asteroid.x + asteroid.size &&
-                        bullet.x + bullet.width > asteroid.x &&
-                        bullet.y < asteroid.y + asteroid.size &&
-                        bullet.y + bullet.height > asteroid.y
-                    ) {
-                        bullets.splice(bulletIndex, 1);
-                        asteroid.life -= 1;
-
-                        if (asteroid.life <= 0) {
-                            asteroids.splice(asteroidIndex, 1);
-                            score += 10;
-                        }
-                    }
-                });
-            });
-        }
-
-        function increaseEnemySpeed() {
-            if (enemyBaseSpeed < maxEnemySpeed) {
-                enemyBaseSpeed += 0.1; // Gradually increase enemy speed
-            }
-        }
-
-        function keyDown(event) {
-            if (event.key === "ArrowLeft") spaceship.dx = -spaceshipSpeed;
-            if (event.key === "ArrowRight") spaceship.dx = spaceshipSpeed;
-            if (event.key === " ") shootBullet();
-        }
-
-        function keyUp(event) {
-            if (event.key === "ArrowLeft" || event.key === "ArrowRight") spaceship.dx = 0;
-        }
-
-        document.addEventListener("keydown", keyDown);
-        document.addEventListener("keyup", keyUp);
-
         document.addEventListener("touchstart", (e) => {
-            if (e.touches.length === 1) {
-                let touch = e.touches[0];
-                touchX = touch.clientX;
+            if (e.target.id !== "joystick") {
                 shootBullet();
+            } else {
+                joystickActive = true;
+                joystickStartX = e.touches[0].clientX;
             }
         });
 
         document.addEventListener("touchmove", (e) => {
-            if (e.touches.length === 1) {
-                let touch = e.touches[0];
-                let deltaX = touch.clientX - touchX;
-                spaceship.dx = deltaX * 1;
-                touchX = touch.clientX;
+            if (joystickActive) {
+                let deltaX = e.touches[0].clientX - joystickStartX;
+                spaceship.dx = deltaX * 0.2;
+                joystickStartX = e.touches[0].clientX;
             }
         });
 
         document.addEventListener("touchend", () => {
             spaceship.dx = 0;
+            joystickActive = false;
         });
-
-        setInterval(generateAsteroid, 600);
-        setInterval(increaseEnemySpeed, 5000); // Enemies get faster every 5 seconds
 
         function gameLoop() {
             if (!gameRunning) return;
@@ -156,8 +95,6 @@
             moveSpaceship();
             drawSpaceship();
             drawBullets();
-            drawAsteroids();
-            checkBulletCollision();
             requestAnimationFrame(gameLoop);
         }
 
