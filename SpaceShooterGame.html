@@ -87,24 +87,25 @@
         }
 
         function checkBulletCollision() {
-            bullets.forEach((bullet, bulletIndex) => {
-                asteroids.forEach((asteroid, asteroidIndex) => {
+            for (let i = bullets.length - 1; i >= 0; i--) {
+                for (let j = asteroids.length - 1; j >= 0; j--) {
                     if (
-                        bullet.x < asteroid.x + asteroid.size &&
-                        bullet.x + bullet.width > asteroid.x &&
-                        bullet.y < asteroid.y + asteroid.size &&
-                        bullet.y + bullet.height > asteroid.y
+                        bullets[i].x < asteroids[j].x + asteroids[j].size &&
+                        bullets[i].x + bullets[i].width > asteroids[j].x &&
+                        bullets[i].y < asteroids[j].y + asteroids[j].size &&
+                        bullets[i].y + bullets[i].height > asteroids[j].y
                     ) {
-                        bullets.splice(bulletIndex, 1);
-                        asteroid.life -= 1; // Reduce asteroid life
+                        bullets.splice(i, 1); // Remove bullet
+                        asteroids[j].life -= 1; // Reduce asteroid life
 
-                        if (asteroid.life <= 0) {
-                            asteroids.splice(asteroidIndex, 1);
+                        if (asteroids[j].life <= 0) {
+                            asteroids.splice(j, 1);
                             score += 10;
                         }
+                        break;
                     }
-                });
-            });
+                }
+            }
         }
 
         function increaseEnemySpeed() {
