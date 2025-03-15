@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotherham Location Exam - 1 Question</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #29b6f6;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #0288d1;
+        }
+
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Rotherham Location Exam</h2>
+    <div class="container">
+        <p class="question" id="questionText"></p>
+        <div class="options" id="optionsContainer"></div>
+        <p id="result"></p>
+        <button onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        const questions = [
+            { question: "Corporation Street, Rotherham to Laughton", answer: "Thurcroft" },
+            { question: "Ship Hill Taxi Rank to Thrybergh", answer: "Dalton" },
+            { question: "Hooton Roberts to Three Horseshoes, Wickersley", answer: "Ravenfield" },
+            { question: "Wath upon Dearne to Golden Ball, Whiston", answer: "Rotherham" },
+            { question: "Thurcroft to Café Sport Bar, Swinton", answer: "Wickersley" },
+            { question: "Bramley to Todwick", answer: "Thurcroft" },
+            { question: "Swallownest to Woodsetts", answer: "North Anston" },
+            { question: "Treeton to The Sportsman, Thorpe Hesley", answer: "Brinsworth" },
+            { question: "Dinnington to Swallownest", answer: "Aston" },
+            { question: "Corporation Street Taxi Rank to Thorpe Hesley", answer: "Kimberworth" },
+            { question: "Dinnington to Clifton Lane Rugby Ground", answer: "Laughton Common" },
+            { question: "Dalton to Aston Hall Hotel", answer: "Aughton" },
+            { question: "Wath upon Dearne to Rotherham Town Hall", answer: "Rawmarsh" },
+            { question: "Brampton Bierlow to New York Stadium", answer: "Greasbrough" },
+            { question: "Kimberworth Park to Rother Valley College, Dinnington", answer: "Laughton Common" },
+            { question: "King Henry, Bramley to Rotherham Town Centre", answer: "Wickersley" },
+            { question: "Swinton to Tesco Superstore, Rotherham", answer: "Rawmarsh" },
+            { question: "Woodsetts to Black Lion, Firbeck", answer: "Letwell" },
+            { question: "Kiveton Park to Woodsetts", answer: "South Anston" },
+            { question: "Todwick to Harthill", answer: "Kiveton Park" },
+            { question: "Ulley to Doncaster Gate Hospital", answer: "Whiston" },
+            { question: "Brinsworth to Hellaby Industrial Estate", answer: "Bramley" },
+            { question: "Todwick to Yate’s Wine Lodge, Rotherham", answer: "Whiston" },
+            { question: "Thorpe Hesley to Rotherham District General Hospital", answer: "Kimberworth" },
+            { question: "Wales to Treeton", answer: "Aughton" },
+            { question: "Swinton to Riverside House, Rotherham", answer: "Rawmarsh" },
+            { question: "Bramley to Kiveton Park", answer: "Todwick" },
+            { question: "Hooton Roberts to Dinnington", answer: "Laughton Common" },
+            { question: "The Hind, Whiston to Horse and Jockey, Rawmarsh", answer: "Parkgate" }
+        ];
+
+        const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinsworth", "Clifton", "Dalton", "Dinnington", "Eastwood", "Ferham", "Greasbrough", "Hellaby", "Hooton Roberts", "Kilnhurst", "Kimberworth", "Kiveton Park", "Laughton Common", "Letwell", "Maltby", "North Anston", "Parkgate", "Ravenfield", "Rawmarsh", "Rotherham", "South Anston", "Swallownest", "Swinton", "Thurcroft", "Todwick", "Whiston", "Wickersley"];
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function nextQuestion() {
+            document.getElementById("result").innerText = "";
+            let randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+            document.getElementById("questionText").innerText = randomQuestion.question;
+
+            let incorrectAnswers = shuffle(locations.filter(l => l !== randomQuestion.answer)).slice(0, 3);
+            let options = shuffle([randomQuestion.answer, ...incorrectAnswers]);
+
+            document.getElementById("optionsContainer").innerHTML = "";
+            options.forEach(option => {
+                let label = document.createElement("label");
+                label.innerHTML = `<input type="radio" name="answer" value="${option}" onclick="checkAnswer('${option}', '${randomQuestion.answer}')"> ${option}`;
+                document.getElementById("optionsContainer").appendChild(label);
+            });
+        }
+
+        function checkAnswer(selected, correct) {
+            let resultText = document.getElementById("result");
+            if (selected === correct) {
+                resultText.innerHTML = `<span class="correct">Correct! The answer is ${correct}.</span>`;
+            } else {
+                resultText.innerHTML = `<span class="incorrect">Incorrect! The correct answer is ${correct}.</span>`;
+            }
+        }
+
+        nextQuestion();
+    </script>
+</body>
+
+</html>
