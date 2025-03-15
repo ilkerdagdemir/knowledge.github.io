@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,14 +14,12 @@
             flex-direction: column;
             text-align: center;
         }
-
         .container {
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
         }
-
         .option {
             background-color: #29b6f6;
             padding: 20px;
@@ -33,16 +30,13 @@
             cursor: pointer;
             width: 200px;
         }
-
         .option:hover {
             background-color: #0288d1;
         }
-
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
         }
-
         p {
             font-size: 16px;
             margin-bottom: 20px;
@@ -50,17 +44,14 @@
         }
     </style>
 </head>
-
 <body>
     <h1>Rotherham Location Exam</h1>
     <p>Please select an exam type. <br>
-        20 Questions will be a mock exam where you see randomly 20 questions of 60 questions. <br>
-        1 Question exam will show one question at a time, and you will see the result immediately after selecting an
-        answer.</p>
+       20 Questions will be a mock exam where you see randomly 20 questions of 60 questions. <br>
+       1 Question exam will show one question at a time, and you will see the result immediately after selecting an answer.</p>
     <div class="container">
-        <div class="option" onclick="location.href='20QuestionsExam.html'">20 Questions</div>
-        <div class="option" onclick="location.href='1By1Question.html'">1 Question</div>
+        <div class="option" onclick="location.href='20Questions.html'">20 Questions</div>
+        <div class="option" onclick="location.href='1Question.html'">1 Question</div>
     </div>
 </body>
-
 </html>
