@@ -4,64 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>60 Question Exam</title>
+    <title>Rotherham Location Exam</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        .container {
-            max-width: 800px;
+            padding: 10px;
+            max-width: 600px;
             margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .question {
             margin-bottom: 15px;
-            font-size: 18px;
-            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
         }
 
         .options label {
             display: block;
-            padding: 5px;
-            cursor: pointer;
         }
 
-        button {
+        #submit,
+        #restart {
             margin-top: 20px;
-            padding: 10px 20px;
+            display: block;
+            width: 100%;
+            padding: 15px;
             font-size: 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
         }
 
-        button:hover {
-            background-color: #218838;
+        .correct {
+            background-color: lightgreen;
+        }
+
+        .incorrect {
+            background-color: lightcoral;
+        }
+
+        .unanswered {
+            background-color: lightblue;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>60 Question Exam</h1>
-        <p>Answer all 60 questions below:</p>
-        <form id="examForm">
-            <div id="questionsContainer">
-                <!-- Questions will be inserted here dynamically -->
-            </div>
-            <button type="submit">Submit Exam</button>
-        </form>
-    </div>
+    <h2>Rotherham Location Exam</h2>
+    <form id="examForm">
+        <div id="questionsContainer"></div>
+        <button type="button" id="submit" onclick="gradeExam()">Submit</button>
+        <button type="button" id="restart" onclick="generateExam()" style="display:none;">Restart</button>
+    </form>
+    <h3 id="result"></h3>
+    
     <script>
         const questions = [
             { question: "Corporation Street, Rotherham to Laughton", answer: "Thurcroft" },
