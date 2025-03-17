@@ -126,6 +126,8 @@
             { question: "Oldcotes to Rotherham Train Station", answer: "Maltby" }
         ];
 
+        const locations = ["Anston", "Aughton", "Bramley", "Brampton Bierlow", "Brinsworth", "Clifton", "Dalton", "Dinnington", "Eastwood", "Ferham", "Greasbrough", "Hellaby", "Hooton Roberts", "Kilnhurst", "Kimberworth", "Kiveton Park", "Laughton Common", "Letwell", "Maltby", "North Anston", "Parkgate", "Ravenfield", "Rawmarsh", "Rotherham", "South Anston", "Swallownest", "Swinton", "Thurcroft", "Todwick", "Whiston", "Wickersley"];
+
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -142,9 +144,19 @@
                 div.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
                 const optionsDiv = document.createElement("div");
                 optionsDiv.classList.add("options");
-                const label = document.createElement("label");
-                label.innerHTML = `<input type="radio" name="q${index}" value="${q.answer}"> ${q.answer}`;
-                optionsDiv.appendChild(label);
+
+                let options = [...locations];
+                shuffle(options);
+                options = options.slice(0, 3);
+                options.push(q.answer);
+                shuffle(options);
+
+                options.forEach(option => {
+                    const label = document.createElement("label");
+                    label.innerHTML = `<input type="radio" name="q${index}" value="${option}"> ${option}`;
+                    optionsDiv.appendChild(label);
+                });
+
                 div.appendChild(optionsDiv);
                 container.appendChild(div);
             });
