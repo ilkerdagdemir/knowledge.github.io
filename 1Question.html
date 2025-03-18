@@ -36,8 +36,13 @@
             margin: 5px 0;
         }
 
-        button {
+        .button-container {
+            display: flex;
+            justify-content: center;
             margin-top: 20px;
+        }
+
+        button {
             padding: 10px 20px;
             font-size: 16px;
             border: none;
@@ -69,7 +74,9 @@
         <p class="question" id="questionText"></p>
         <div class="options" id="optionsContainer"></div>
         <p id="result"></p>
-        <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+        <div class="button-container">
+            <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+        </div>
     </div>
 
     <script>
