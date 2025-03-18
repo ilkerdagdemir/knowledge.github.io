@@ -80,30 +80,44 @@
     </div>
 
     <script>
-        const questions = [
+        let questions = [
             { question: "Corporation Street, Rotherham to Laughton", answer: "Thurcroft" },
             { question: "Ship Hill Taxi Rank to Thrybergh", answer: "Dalton" },
             { question: "Hooton Roberts to Three Horseshoes, Wickersley", answer: "Ravenfield" }
         ];
         const locations = ["Thurcroft", "Dalton", "Ravenfield", "Rotherham", "Wickersley", "Brinsworth"];
 
+        let shuffledQuestions = [];
+        let questionIndex = 0;
+
         function shuffle(array) {
             return array.sort(() => Math.random() - 0.5);
+        }
+
+        function initializeQuestions() {
+            shuffledQuestions = shuffle([...questions]);
+            questionIndex = 0;
         }
 
         function nextQuestion() {
             document.getElementById("result").innerText = "";
             document.getElementById("nextBtn").style.display = "none";
-            let randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-            document.getElementById("questionText").innerText = randomQuestion.question;
 
-            let incorrectAnswers = shuffle(locations.filter(l => l !== randomQuestion.answer)).slice(0, 3);
-            let options = shuffle([randomQuestion.answer, ...incorrectAnswers]);
+            if (questionIndex >= shuffledQuestions.length) {
+                initializeQuestions();
+            }
+
+            let currentQuestion = shuffledQuestions[questionIndex];
+            document.getElementById("questionText").innerText = currentQuestion.question;
+            questionIndex++;
+
+            let incorrectAnswers = shuffle(locations.filter(l => l !== currentQuestion.answer)).slice(0, 3);
+            let options = shuffle([currentQuestion.answer, ...incorrectAnswers]);
 
             document.getElementById("optionsContainer").innerHTML = "";
             options.forEach(option => {
                 let label = document.createElement("label");
-                label.innerHTML = `<input type="radio" name="answer" value="${option}" onclick="checkAnswer('${option}', '${randomQuestion.answer}')"> ${option}`;
+                label.innerHTML = `<input type="radio" name="answer" value="${option}" onclick="checkAnswer('${option}', '${currentQuestion.answer}')"> ${option}`;
                 document.getElementById("optionsContainer").appendChild(label);
             });
         }
@@ -119,8 +133,8 @@
             }
         }
 
+        initializeQuestions();
         nextQuestion();
     </script>
 </body>
-
 </html>
